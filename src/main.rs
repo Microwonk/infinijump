@@ -6,7 +6,7 @@ use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 use bevy::winit::WinitWindows;
 use bevy::DefaultPlugins;
-use infini_jump::InfinijumpPlugin; // ToDo: Replace bevy_game with your new crate name.
+use infini_jump::InfiniJumpPlugin;
 use std::io::Cursor;
 use winit::window::Icon;
 
@@ -34,7 +34,7 @@ fn main() {
             }),
             ..default()
         }))
-        .add_plugins(InfinijumpPlugin)
+        .add_plugins(InfiniJumpPlugin)
         .add_systems(Startup, set_window_icon)
         .run();
 }
