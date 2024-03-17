@@ -6,6 +6,7 @@ use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 use bevy::winit::WinitWindows;
 use bevy::DefaultPlugins;
+use bevy_xpbd_2d::prelude::*;
 use infini_jump::InfiniJumpPlugin;
 use std::io::Cursor;
 use winit::window::Icon;
@@ -30,10 +31,12 @@ fn main() {
                 fit_canvas_to_parent: true,
                 // Tells wasm not to override default event handling, like F5 and Ctrl+R
                 prevent_default_event_handling: false,
+
                 ..default()
             }),
             ..default()
         }))
+        .add_plugins((PhysicsPlugins::default(), PhysicsDebugPlugin::default()))
         .add_plugins(InfiniJumpPlugin)
         .add_systems(Startup, set_window_icon)
         .run();
