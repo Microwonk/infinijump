@@ -6,15 +6,15 @@ use super::{Tile, TILE_HEIGHT, TILE_WIDTH};
 pub const CHUNK_WIDTH: f32 = 16.0;
 pub const CHUNK_HEIGHT: f32 = 16.0;
 
-#[derive(Debug, Eq, PartialEq, Default)]
-pub struct Chunk<T: Tile> {
+#[derive(Debug, Default)]
+pub struct Chunk {
     pub ch_pos: (i32, i32),
     pub width: u32,
     pub height: u32,
-    pub data: Vec<T>,
+    pub data: Vec<Box<dyn Tile>>,
 }
 
-impl<T: Tile> Chunk<T> {
+impl Chunk {
     // TODO: make this more efficient?
     pub fn generate_colliders(&self) -> HashMap<(i32, i32), Collider> {
         let mut colliders = HashMap::new();

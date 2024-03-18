@@ -141,10 +141,9 @@ impl<L: LevelGenerator, F: Component> LevelGeneratorPlugin<L, F> {
 
 pub trait LevelGenerator
 where
-    Self: Send + Sync + 'static,
+    Self: Sized + Send + Sync + 'static,
 {
-    type Tile: Tile;
-    fn generate_chunk(seed: u32, start: (i32, i32)) -> Chunk<Self::Tile>;
+    fn generate_chunk(seed: u32, start: (i32, i32)) -> Chunk;
 }
 
 impl<L: LevelGenerator, F: Component> Plugin for LevelGeneratorPlugin<L, F> {

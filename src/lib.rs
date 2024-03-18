@@ -42,6 +42,7 @@ pub struct InfiniJumpPlugin;
 impl Plugin for InfiniJumpPlugin {
     fn build(&self, app: &mut App) {
         app.add_state::<GameState>().add_plugins((
+            PhysicsPlugins::default(),
             LevelGeneratorPlugin::<SimplePerlinLevelGenerator, CharacterController>::seeded(
                 thread_rng().gen(),
             ),
@@ -56,7 +57,11 @@ impl Plugin for InfiniJumpPlugin {
         {
             app.add_plugins(WorldInspectorPlugin::new())
                 .register_type::<Seed>()
-                .add_plugins((FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin::default()))
+                .add_plugins((
+                    FrameTimeDiagnosticsPlugin,
+                    LogDiagnosticsPlugin::default(),
+                    PhysicsDebugPlugin::default(),
+                ))
                 .add_systems(Update, close_on_esc);
         }
     }

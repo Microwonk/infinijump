@@ -6,7 +6,6 @@ use bevy::prelude::*;
 use bevy::window::PrimaryWindow;
 use bevy::winit::WinitWindows;
 use bevy::DefaultPlugins;
-use bevy_xpbd_2d::prelude::*;
 use infini_jump::InfiniJumpPlugin;
 use std::io::Cursor;
 use winit::window::Icon;
@@ -35,7 +34,6 @@ fn main() {
             }),
             ..default()
         }))
-        .add_plugins((PhysicsPlugins::default(), PhysicsDebugPlugin::default()))
         .add_plugins(InfiniJumpPlugin)
         .add_systems(Startup, set_window_icon)
         .run();

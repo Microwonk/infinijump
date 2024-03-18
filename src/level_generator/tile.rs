@@ -1,18 +1,22 @@
+use std::fmt::Debug;
+
 use bevy::prelude::*;
 
 pub const TILE_HEIGHT: f32 = 32.0;
 pub const TILE_WIDTH: f32 = 32.0;
 pub const TILE_SCALE: f32 = 32.0;
 
+// TODO: this is just overengineered, should use a struct with data and act on that data seperately for visuals
+// was very useful for learning purposes though (dyn and traits)
 pub trait Tile
 where
-    Self: Sized + Send + Sync + 'static,
+    Self: Debug + Send + Sync + 'static,
 {
     fn make_sprite_bundle(&self) -> SpriteBundle;
     fn pos(&self) -> (i32, i32);
 }
 
-#[derive(Eq, PartialEq, Debug)]
+#[derive(Debug)]
 pub struct ColorTile {
     pos: (i32, i32),
     pub(crate) color: &'static str,
@@ -35,6 +39,7 @@ impl Tile for ColorTile {
             ..default()
         }
     }
+
     fn pos(&self) -> (i32, i32) {
         self.pos
     }
@@ -51,18 +56,10 @@ impl ColorTile {
 }
 
 #[derive(Debug)]
-pub enum TexturedTile {
-    Atlas {
-        pos: (i32, i32),
-        texture_path: &'static str,
-        tex_index: u32,
-        z_index: i32,
-    },
-    Single {
-        pos: (i32, i32),
-        texture_path: &'static str,
-        z_index: i32,
-    },
+pub struct TexturedTile {
+    pos: (i32, i32),
+    pub tex_index: u32,
+    pub z_index: i32,
 }
 
 impl Tile for TexturedTile {
@@ -71,29 +68,15 @@ impl Tile for TexturedTile {
     }
 
     fn pos(&self) -> (i32, i32) {
-        todo!()
+        self.pos
     }
 }
 
 impl TexturedTile {
-    pub fn atlas(
-        pos: (i32, i32),
-        texture_path: &'static str,
-        tex_index: u32,
-        z_index: i32,
-    ) -> Self {
-        Self::Atlas {
+    pub fn new(pos: (i32, i32), tex_index: u32, z_index: i32) -> Self {
+        Self {
             pos,
-            texture_path,
             tex_index,
-            z_index,
-        }
-    }
-
-    pub fn single(pos: (i32, i32), texture_path: &'static str, z_index: i32) -> Self {
-        Self::Single {
-            pos,
-            texture_path,
             z_index,
         }
     }
