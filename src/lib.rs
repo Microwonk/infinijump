@@ -2,7 +2,6 @@
 
 mod audio;
 mod character_controller;
-mod config;
 mod level_generator;
 mod loading;
 mod menu;
@@ -19,12 +18,13 @@ use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_pancam::{PanCam, PanCamPlugin};
 use bevy_xpbd_2d::math::{Scalar, Vector};
 use bevy_xpbd_2d::prelude::*;
-use character_controller::{CharacterControllerBundle, CharacterControllerPlugin};
-use level_generator::perlin_generator::PerlinLevelGenerator;
+use character_controller::{
+    CharacterController, CharacterControllerBundle, CharacterControllerPlugin,
+};
+use level_generator::perlin_generator::SimplePerlinLevelGenerator;
 use level_generator::{LevelGeneratorPlugin, Seed};
 use rand::{thread_rng, Rng};
 
-// This example game uses States to separate logic
 #[derive(States, Default, Clone, Eq, PartialEq, Debug, Hash)]
 enum GameState {
     // During the loading State the LoadingPlugin will load our assets
@@ -34,19 +34,17 @@ enum GameState {
     Playing,
     // Here the menu is drawn and waiting for player interaction
     Menu,
+    // TODO: Add a pause state
 }
 
 pub struct InfiniJumpPlugin;
 
 impl Plugin for InfiniJumpPlugin {
     fn build(&self, app: &mut App) {
-        // need to do this outside of the add_plugins call, because otherwise we would borrow more than once
-        let mut rng = thread_rng();
-        let seed = rng.gen();
-        let lgp = LevelGeneratorPlugin::<PerlinLevelGenerator>::seeded(seed);
-
         app.add_state::<GameState>().add_plugins((
-            lgp,
+            LevelGeneratorPlugin::<SimplePerlinLevelGenerator, CharacterController>::seeded(
+                thread_rng().gen(),
+            ),
             CharacterControllerPlugin,
             TempPlugin,
             LoadingPlugin,
@@ -64,7 +62,7 @@ impl Plugin for InfiniJumpPlugin {
     }
 }
 
-// TODO: TempPlugin
+// TODO: Temporary Plugin
 pub struct TempPlugin;
 
 impl Plugin for TempPlugin {
@@ -81,6 +79,7 @@ fn camera_setup(mut commands: Commands) {
         .insert(PanCam::default());
 }
 
+#[allow(dead_code)]
 fn spawn_player(mut commands: Commands) {
     commands
         .spawn(SpriteBundle {
