@@ -6,7 +6,7 @@ pub const TILE_SCALE: f32 = 32.0;
 
 pub trait Tile
 where
-    Self: Sized + Send + Sync + Eq + PartialEq + 'static,
+    Self: Sized + Send + Sync + 'static,
 {
     fn make_sprite_bundle(&self) -> SpriteBundle;
     fn pos(&self) -> (i32, i32);
@@ -45,6 +45,55 @@ impl ColorTile {
         Self {
             pos,
             color,
+            z_index,
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum TexturedTile {
+    Atlas {
+        pos: (i32, i32),
+        texture_path: &'static str,
+        tex_index: u32,
+        z_index: i32,
+    },
+    Single {
+        pos: (i32, i32),
+        texture_path: &'static str,
+        z_index: i32,
+    },
+}
+
+impl Tile for TexturedTile {
+    fn make_sprite_bundle(&self) -> SpriteBundle {
+        todo!()
+    }
+
+    fn pos(&self) -> (i32, i32) {
+        todo!()
+    }
+}
+
+impl TexturedTile {
+    pub fn atlas(
+        pos: (i32, i32),
+        texture_path: &'static str,
+        tex_index: u32,
+        z_index: i32,
+    ) -> Self {
+        Self::Atlas {
+            pos,
+            texture_path,
+            tex_index,
+            z_index,
+        }
+    }
+
+    pub fn single(pos: (i32, i32), texture_path: &'static str, z_index: i32) -> Self {
+        Self::Single {
+            pos,
+            texture_path,
             z_index,
         }
     }
