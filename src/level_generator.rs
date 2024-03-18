@@ -34,7 +34,7 @@ pub struct Seed(pub u32);
 #[derive(Default)]
 pub struct LevelGeneratorPlugin<L: LevelGenerator, F: Component> {
     seed: u32,
-    _phantom_t: PhantomData<L>,
+    _phantom_l: PhantomData<L>,
     _phantom_f: PhantomData<F>,
 }
 
@@ -42,7 +42,7 @@ impl<L: LevelGenerator, F: Component> LevelGeneratorPlugin<L, F> {
     pub fn seeded(seed: u32) -> Self {
         Self {
             seed,
-            _phantom_t: default(),
+            _phantom_l: default(),
             _phantom_f: default(),
         }
     }
