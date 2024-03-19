@@ -11,7 +11,8 @@ pub struct Chunk {
     pub ch_pos: (i32, i32),
     pub width: u32,
     pub height: u32,
-    pub data: Vec<Box<dyn Tile>>,
+    pub data: Vec<Tile>,
+    pub layer_info: HashMap<u32, &'static str>,
 }
 
 impl Chunk {
